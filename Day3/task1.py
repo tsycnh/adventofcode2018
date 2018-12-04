@@ -1,7 +1,7 @@
 import numpy as np
 # 求重叠区域面积
 f = open('./input.txt',mode='r')
-canvas = np.zeros(shape=[2000,2000])
+canvas = np.zeros(shape=[1000,1000])
 # canvas-=1
 def get_data(r):
     pos_a = r.find('@')
