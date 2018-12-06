@@ -1,6 +1,7 @@
 import numpy as np
 
 f = open('input.txt',mode='r')
+canvas_width = 1000
 data = f.readlines()
 class Point():
     def __init__(self,ID,x,y):
@@ -16,12 +17,12 @@ for i in range(len(data)):
     y = y[1:-1]
     p = Point(i,int(x),int(y))
     all_points.append(p)
-canvas = np.zeros(shape=(1000,1000))
+canvas = np.zeros(shape=(canvas_width,canvas_width))
 def calc_M_distance(pointA,pointB):
     return abs(pointA.x - pointB.x) + abs(pointA.y - pointB.y)
-for i in range(0,1000):
+for i in range(0,canvas_width):
     print('i:', i)
-    for j in range(0,1000):
+    for j in range(0,canvas_width):
         tmpPoint = Point(-1,j,i)#i为行，j为列。
         distances = []
         for p in all_points:
@@ -29,12 +30,14 @@ for i in range(0,1000):
             distances.append({'ID':p.ID,'distance':distance})
         distances.sort(key=lambda x:x['distance'])
 
-        if i == 0 or j==0:#靠边的点,确认无限
+        if i == 0 or j == 0 or i==canvas_width-1 or j==canvas_width-1:#靠边的点,确认无限
             for k in range(len(all_points)):
                 if all_points[k].ID == distances[0]['ID']:
                     all_points[k].infinite = True#无限点
         if distances[0]['distance'] == distances[1]['distance']:
-            pass#中立点，0
+            # pass#中立点，0
+            canvas[i, j] = -1
+
         else:
             canvas[i,j] = distances[0]['ID']
             for k in range(len(all_points)):
@@ -48,6 +51,4 @@ for p in all_points:
     if p.infinite == False:
         if p.area > largest_area:
             largest_area = p.area
-print(largest_area+1)
-
-
+print(largest_area)
